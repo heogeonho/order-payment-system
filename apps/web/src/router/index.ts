@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,15 +6,25 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView,
+      redirect: '/products',
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
+      // SCR-HP-001: 상품 목록 화면
+      path: '/products',
+      name: 'product-list',
+      component: () => import('../views/ProductListView.vue'),
+    },
+    {
+      // SCR-HP-002: 상품 상세/주문 화면
+      path: '/products/:id',
+      name: 'product-order',
+      component: () => import('../views/ProductOrderView.vue'),
+    },
+    {
+      // SCR-HP-004: 주문 완료 화면
+      path: '/orders/:orderId/complete',
+      name: 'order-complete',
+      component: () => import('../views/OrderCompleteView.vue'),
     },
   ],
 })
