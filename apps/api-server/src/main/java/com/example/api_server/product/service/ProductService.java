@@ -4,11 +4,15 @@ import com.example.api_server.common.exception.OutOfStockException;
 import com.example.api_server.common.exception.ProductNotAvailableException;
 import com.example.api_server.common.exception.ProductNotFoundException;
 import com.example.api_server.product.domain.Product;
+import com.example.api_server.product.dto.ProductResponse;
 import com.example.api_server.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 상품 서비스
@@ -21,6 +25,23 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+
+    /**
+     * 전체 상품 목록 조회
+     */
+    public List<ProductResponse> getAllProducts() {
+        return productRepository.findAll().stream()
+                .map(ProductResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 단일 상품 조회
+     */
+    public ProductResponse getProduct(Long productId) {
+        Product product = getProductOrThrow(productId);
+        return ProductResponse.from(product);
+    }
 
     /**
      * 상품 조회 (없으면 예외 발생)
